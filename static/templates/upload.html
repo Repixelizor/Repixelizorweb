@@ -32,8 +32,60 @@
 
 
   <div class="hero_area">
+    <header class="header_section">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-11 offset-lg-1">
+            <nav class="navbar navbar-expand-lg custom_nav-container ">
+              <a class="navbar-brand" href="index.html">
+                <img src="/static/templates/images/logo.png" alt="">
+                <span>
+                    Repixelizor
+                </span>
+              </a>
+              </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
 
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
+                  <ul class="navbar-nav  ">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{{url_for('index')}}">Home </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{url_for('about')}}"> About <span class="sr-only">(current)</span> </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="static/templates/test.html"> Portfolio </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{url_for('Contact')}}">Contact Us</a>
+                    </li>
+                  </ul>
+                  <form class="form-inline">
+                    <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit"></button>
+                  </form>
+                </div>
+
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header> 
 <section class="portfolio_section layout_padding">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
     <div class="container">
       <div class="heading_container">
         <h2>
@@ -62,54 +114,54 @@
           <div class="column">
             <form methods="post" action="{{url_for('upload_image')}}" class="dropzone" style="height:600px;width:600px"> 
           </form>
-          {% for file in upfiles %}
-          <img src="{{ url_for('display_image',filename=file) }}" width="500" height="600" alt="">
-          {% endfor %}
+          
           
         </div>
-        <div class="column" >
-          <form name="process" method="post" action="/process" enctype="multipart/form-data" style="padding-left:50px;padding-right:50px;"> 
-              <p>
-                <input type="checkbox" id="colour" name="colour" value="colour">Colour
-                <input type="checkbox" id="sharpen" name="sharpen" value="sharpen">Sharpen
-                <input type="checkbox" id="deoldify" name="deoldify" value="deoldify">Deoldify
-                  <input type="submit" name="action" value="Submit_process" class="btn btn-info" onclick="loading()">
-              </p>
-          </form>
+        <div class="column" style="padding-left:40px;padding-right:50px;"> 
+          <p>My Image Has: Select all that apply</p>  
+           
+              <div class="row">
+                <div class="column">
+          <form name="process" method="post" action="/process" enctype="multipart/form-data" style="padding-left:10px;padding-right:50px;"> 
+            <p>
+              <input type="radio" id="scratches" name="scratches" value="scratches">Scratches
+              <input type="radio" id="deoldify" name="deoldify" value="deoldify">Old Black and white                  
+            </p>  
+            <input type="submit" name="action" value="Process" class="btn btn-info" >
+              
+            </form>
+            </div>
+          
+              <div class="column">
+                <form name="logout"  action="{{url_for('logout')}}"  enctype="multipart/form-data" style="padding-top:40px;padding-right:50px;">
+                  
+                        <input type="submit" name="logout" value="logout" class="btn btn-info" >
+                        
+                </form>
+              </div>
+            </div>
+          
         </div>
+        </div>
+        <div class="row">
+          <div class="container" style="border: 2px dashed blue;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;height: 80px;width: 800px;">
+    <p >
+        We are adding more features in the website and will incur charges for subscription
+      </p>
+      <p >
+        Please let us know what you like and what you want to have in the site
+      </p>
+      </div>
         </div>
         <!-- <div class="row" > -->
           
-        <div class="column">
-          <form name="logout"  action="/logout" enctype="multipart/form-data" style="padding-top:50px;padding-right:50px;">
-              <p>
-                  <input type="submit" name="logout" value="logout" class="btn btn-info" >
-              </p>
-          </form>
-        </div>
-        <div class="column">
-          <form name="photos"  action="{{url_for('photos')}}" style="padding-top:50px;padding-right:50px;">
-              <p>
-                  <input type="submit" class="btn btn-info" >
-              </p>
-          </form>
-        </div>
-        <div class="column">
-          <form name="home"  action="/pay"  style="padding-top:50px;padding-right:50px;">
-              <p>
-                  <input type="submit" name="pay" value="pay" class="btn btn-info" >
-              </p>
-          </form>
-        </div>
+        
           </div>
         </div>
        
-      </div>
-      
-    </div>
-    
-  </section>
-  
-  </div>
+ 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js" integrity="sha512-U2WE1ktpMTuRBPoCFDzomoIorbOyUv0sP8B+INA3EzNAhehbzED1rOJg6bCqPf/Tuposxb5ja/MAUnC8THSbLQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   </body>

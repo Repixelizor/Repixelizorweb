@@ -5,6 +5,7 @@ import numpy as np
 # import pytorch library
 import torch
 # check for GPU
+from urllib.parse import urlencode
 if not torch.cuda.is_available():
     print('GPU not available.')
 # necessary imports
@@ -111,7 +112,7 @@ def sharp_scratch(img1,bsharpurl,sharpurl):
     cv2.imwrite(sharpurl, image_sharp)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
-
+    return "Done"
 
 
 def deoldify(sourceurl):  

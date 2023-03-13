@@ -14,8 +14,9 @@ from datetime import datetime as dt
 
 monthyear=str(dt.now())[:7]+"/"
 # print(monthyear)
-global Bloburl
-Bloburl=""
+global filename
+filename=""
+
 
 # REPLICATE_API_TOKEN=["37facb33e6e503bbedd695face8c2d29174f98db"]
 client=replicate.Client(api_token="37facb33e6e503bbedd695face8c2d29174f98db")
@@ -59,7 +60,7 @@ bucket=storage.bucket()
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secrets_file,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="http://127.0.0.1:5000/callback"
+    redirect_uri="http://0.0.0.0:5000/callback"
 )
 
 def login_is_required(function):
@@ -154,36 +155,52 @@ def display_image(filename):
 @app.route('/process',methods=["GET","POST"],strict_slashes=False)
 def process():
         uid=str(dt.now())
-        print(request.form.get("colour"))
-        print("yes")
+        scratch=request.form.get("scratches")
+        deoldify1=request.form.get("deoldify")
+        # filenames=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        # blob = bucket.blob(session["google_id"] + "/upload/"+monthyear+ filename)
+        # blob.upload_from_filename(filenames)
+        # blob.make_public()
+        # Bloburl2=str(blob.public_url)
+        # Bloburl.name
+
+        
+        print(filenames,Bloburl)
         bsharpurl=os.path.join(app.config['DOWNLOAD_FOLDER'], "bshrap.jpg")
         sharpurl=os.path.join(app.config['DOWNLOAD_FOLDER'], "ssharp.jpg")
-        if request.form.get("colour")=="colour":
-             
-             sharp_scratch(img1=filename,bsharpurl=bsharpurl,sharpurl=sharpurl)
-             blob_file1=session["google_id"] + "/download/"+uid+ "bsharp.jpg"
-             blob1 = bucket.blob(blob_file1)
-             blob1.upload_from_filename(bsharpurl)
-             blob1.make_public()
-             blob_file2=session["google_id"] + "/download/"+uid+ "ssharp.jpg"
-             blob2 = bucket.blob(blob_file2)
-             blob2.upload_from_filename(sharpurl)
-             blob2.make_public()
-             print("your file url", blob1.public_url)
-             return render_template('process.html', filename=filenames,filename2=blob1.public_url )
-        if request.form.get("deoldify")=="deoldify":
-             file=deoldify(Bloburl)
-             blob_file=session["google_id"] + "/download/"+uid+ "deoldify.jpg"
-             blob = bucket.blob(blob_file)
-             blob.upload_from_filename(file)
-             blob.make_public()
-             print("your file url", blob.public_url)
-             return render_template('process.html', filename=filenames,filename2=blob.public_url )
+        if filename=="":
+             flash("No File Uploaded")
+             return redirect(url_for('upload_image'))
+        else:
+            if scratch=="scratches":
+                
+                sharp_scratch(img1=filenames,bsharpurl=bsharpurl,sharpurl=sharpurl)
+                blob_file1=session["google_id"] + "/download/"+uid+ "bsharp.jpg"
+                blob1 = bucket.blob(blob_file1)
+                blob1.upload_from_filename(bsharpurl)
+                blob1.make_public()
+                Bloburl1=blob1.public_url
+                file=deoldify(Bloburl1)
+                blob_file=session["google_id"] + "/download/"+uid+ "deoldify.jpg"
+                blob = bucket.blob(blob_file)
+                blob.upload_from_filename(file)
+                blob.make_public()
+                print("your file url", blob.public_url)
+                
+            if deoldify1=="deoldify":
+                file=deoldify(Bloburl)
+                blob_file=session["google_id"] + "/download/"+uid+ "deoldify.jpg"
+                blob = bucket.blob(blob_file)
+                blob.upload_from_filename(file)
+                blob.make_public()
+                print("your file url", blob.public_url)
+                # return render_template('process.html', filename=filename,filename2=blob.public_url )
+            return render_template('process.html', filename=filename,filename2=blob.public_url )
  
-@app.route('/process', methods=['POST'])
-def download():
-    return send_from_directory(
-                               session["google_id"] + "/download/"+ "deoldify.jpg", as_attachment=True)   
+# @app.route('/process', methods=['POST'])
+# def download():
+#     return send_from_directory(
+#                                session["google_id"] + "/download/"+ "deoldify.jpg", as_attachment=True)   
 
 
 
@@ -223,13 +240,14 @@ def upload_image():
             blob_file=session["google_id"] + "/upload/"+monthyear+ filename
             
             blob = bucket.blob(blob_file)
-            global Bloburl
-            Bloburl=blob.public_url
+            
             blob.upload_from_filename(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             blob.make_public()
+            global Bloburl
+            Bloburl=blob.public_url
             print("your file url", blob.public_url)
             # return redirect(url_for('homeindex'))
-            return render_template('upload.html',name=session["name"])
+            return render_template('upload.html',name=session["name"],disabled="False")
         else:
             flash('Allowed image types are - png, jpg, jpeg, gif')
             return redirect(request.url)
@@ -240,4 +258,4 @@ def upload_image():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)

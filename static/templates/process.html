@@ -30,79 +30,89 @@
 <body>
 
   <div class="hero_area">
-
-<section class="portfolio_section layout_padding">
-    <div class="container">
-      <div class="heading_container">
-        <h2>
-          Colour in Your photos
-        </h2>
-        <p>
-          Below is the coloured photo
-        </p>
-      </div>
-      <div class="container">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
         <div class="row">
-      <div class="column" style="padding-left:50px;padding-right:50px;">
-        <div class="heading_container">
-          <p>
-            Before
-          </p>
-        </div>
-      <div class="box-2">
-        <div class="img-box b-2">
-          <div class="img-box b-1">
-            <img src="{{ url_for('display_image',filename=filename) }}" width="500" height="600" alt="">
-            <div class="btn-box">
-              <a href="" class="btn-1">
+          <div class="col-lg-11 offset-lg-1">
+            <nav class="navbar navbar-expand-lg custom_nav-container ">
+              <a class="navbar-brand" href="index.html">
+                <img src="/static/templates/images/logo.png" alt="">
+                <span>
+                    Repixelizor
+                </span>
               </a>
-            </div>
-          </div>
-        </div> 
-      </div>
-       </div>
-       <div class="column" style="padding-left:50px;padding-right:50px;">
-        <div class="heading_container">
-          <p>
-            After
-          </p>
-        </div>
-        <div class="box-2">
-          <div class="img-box b-2">
-            <div class="img-box b-1">
-              <img src="{{ filename2 }}" width="500" height="600" alt="">
-              <div class="btn-box">
-                <a href="" class="btn-1">
-  
-                </a>
+              </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
+                  <ul class="navbar-nav  ">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{{url_for('homeindex')}}">Home </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{url_for('about')}}"> About <span class="sr-only">(current)</span> </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{url_for('Contact')}}">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('logout')}}"> Logout </a>
+                      </li>
+                  </ul>
+                  
+                </div>
+
               </div>
-            </div>
-          </div>
-         </div>
-         </div>
-         </div>
-         </div>
-        </div>
-          <div class="container" style="padding-left:50px;padding-right:50px;">
-          <div class="row">
-            <form name="home"  action="/home" enctype="multipart/form-data">
-                <p>
-                    <input type="submit" name="home" value="home" class="btn btn-info" >
-                </p>
-            </form>
-            <form name="home"  action="/logout" enctype="multipart/form-data">
-                <p>
-                    <input type="submit" name="logout" value="logout" class="btn btn-info" >
-                </p>
-            </form>
+            </nav>
           </div>
         </div>
-       
       </div>
-      
+    </header>
+    <div class="container" style="border: 2px dashed #B22222;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;height: 500;width: 600;">
+    <div class="row">
+    <div class="column">
+        <div class="heading_container">
+            <p style="padding-top:50px;">
+              Before
+            </p>
+          </div>
+        <img src="{{ url_for('display_image',filename=filename) }}" style="padding-top:10px;padding-left:50px;height: 700px;width: 550px;" alt="">
     </div>
-    
-  </section>
-  
+    <div class="column">
+        <div class="heading_container">
+            <p style="padding-top:50px;">
+              After
+            </p>
+          </div>
+        <img src="{{ filename2 }}" style="padding-top:10px;padding-left:50px;height: 700px;width: 550px;" alt="">
+    </div>
+    <div class="row" style="padding-left:60px;">
+    <div class="container" style="border: 2px dashed blue;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;height: 40px;width: 800px;">
+    <p >
+        Download_URL: {{ filename2 }}
+      </p>
+      </div>
+    </div>
+    </div>
+</div>
   </div>
-  </body>
+
+
+  <script type="text/javascript" src="/static/templates/js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="/static/templates/js/bootstrap.js"></script>
+
+</body>
+
+</html>
