@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Repixelizor</title>
+
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="/static/templates/css/bootstrap.css" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="/static/templates/css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="/static/templates/css/responsive.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css" integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+
+
+  <div class="hero_area">
+
+<section class="portfolio_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Repix your Memories
+        </h2>
+        <p>
+          Hello {{name}} Please Upload an Image Below and Select all parameter for Processing
+        </p>
+      </div>
+      <div class="box-2">
+        <div class="img-box b-2">
+          <div class="img-box b-1">
+            
+            <div class="btn-box">
+              <a href="" class="btn-1">
+
+              </a>
+            </div>
+          </div>
+          
+            </div>
+          </div>
+        </div>
+          <div class="container" >
+          <div class="row" >
+          <div class="column">
+            <form methods="post" action="{{url_for('upload_image')}}" class="dropzone" style="height:600px;width:600px"> 
+          </form>
+          {% for file in upfiles %}
+          <img src="{{ url_for('display_image',filename=file) }}" width="500" height="600" alt="">
+          {% endfor %}
+          
+        </div>
+        <div class="column" >
+          <form name="process" method="post" action="/process" enctype="multipart/form-data" style="padding-left:50px;padding-right:50px;"> 
+              <p>
+                <input type="checkbox" id="colour" name="colour" value="colour">Colour
+                <input type="checkbox" id="sharpen" name="sharpen" value="sharpen">Sharpen
+                <input type="checkbox" id="deoldify" name="deoldify" value="deoldify">Deoldify
+                  <input type="submit" name="action" value="Submit_process" class="btn btn-info" onclick="loading()">
+              </p>
+          </form>
+        </div>
+        </div>
+        <!-- <div class="row" > -->
+          
+        <div class="column">
+          <form name="logout"  action="/logout" enctype="multipart/form-data" style="padding-top:50px;padding-right:50px;">
+              <p>
+                  <input type="submit" name="logout" value="logout" class="btn btn-info" >
+              </p>
+          </form>
+        </div>
+        <div class="column">
+          <form name="photos"  action="{{url_for('photos')}}" style="padding-top:50px;padding-right:50px;">
+              <p>
+                  <input type="submit" class="btn btn-info" >
+              </p>
+          </form>
+        </div>
+        <div class="column">
+          <form name="home"  action="/pay"  style="padding-top:50px;padding-right:50px;">
+              <p>
+                  <input type="submit" name="pay" value="pay" class="btn btn-info" >
+              </p>
+          </form>
+        </div>
+          </div>
+        </div>
+       
+      </div>
+      
+    </div>
+    
+  </section>
+  
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js" integrity="sha512-U2WE1ktpMTuRBPoCFDzomoIorbOyUv0sP8B+INA3EzNAhehbzED1rOJg6bCqPf/Tuposxb5ja/MAUnC8THSbLQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </body>
