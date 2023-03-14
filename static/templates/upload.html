@@ -1,81 +1,10 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-  <!-- Basic -->
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <!-- Site Metas -->
-  <meta name="keywords" content="" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-
-  <title>Repixelizor</title>
-
-
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="/static/templates/css/bootstrap.css" />
-
-  <!-- fonts style -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-
-  <!-- Custom styles for this template -->
-  <link href="/static/templates/css/style.css" rel="stylesheet" />
-  <!-- responsive style -->
-  <link href="/static/templates/css/responsive.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css" integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-
-<body>
-
-
-  <div class="hero_area">
-    <header class="header_section">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-lg-11 offset-lg-1">
-            <nav class="navbar navbar-expand-lg custom_nav-container ">
-              <a class="navbar-brand" href="index.html">
-                <img src="/static/templates/images/logo.png" alt="">
-                <span>
-                    Repixelizor
-                </span>
-              </a>
-              </a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
-                  <ul class="navbar-nav  ">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="{{url_for('index')}}">Home </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{url_for('about')}}"> About <span class="sr-only">(current)</span> </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="static/templates/test.html"> Portfolio </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{{url_for('Contact')}}">Contact Us</a>
-                    </li>
-                  </ul>
-                  <form class="form-inline">
-                    <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit"></button>
-                  </form>
-                </div>
-
-              </div>
-            </nav>
-          </div>
-        </div>
-      </div>
-    </header> 
+{% extends "layout.html" %}
+{% block title %}Upload{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
 <section class="portfolio_section layout_padding">
   {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -108,7 +37,7 @@
           
             </div>
           </div>
-        </div>
+        
           <div class="container" >
           <div class="row" >
           <div class="column">
@@ -160,8 +89,5 @@
           
         
           </div>
-        </div>
-       
- 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js" integrity="sha512-U2WE1ktpMTuRBPoCFDzomoIorbOyUv0sP8B+INA3EzNAhehbzED1rOJg6bCqPf/Tuposxb5ja/MAUnC8THSbLQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  </body>
+          </section>
+          {% endblock %}
