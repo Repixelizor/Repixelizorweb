@@ -60,7 +60,7 @@ bucket=storage.bucket()
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secrets_file,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri="http://0.0.0.0:5000/callback"
+    redirect_uri="http://127.0.0.1:5000/callback"
 )
 
 def login_is_required(function):
@@ -123,6 +123,10 @@ def callback():
 def index():
      return render_template("Login.html")
 
+@app.route("/privacy")
+def privacy():
+     return render_template("privacy.html")
+
 @app.route("/About")
 def about():
      return render_template("aboutus.html")
@@ -157,7 +161,7 @@ def process():
         uid=str(dt.now())
         scratch=request.form.get("scratches")
         deoldify1=request.form.get("deoldify")
-        # filenames=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        filenames=os.path.join(app.config['UPLOAD_FOLDER'], filename)
         # blob = bucket.blob(session["google_id"] + "/upload/"+monthyear+ filename)
         # blob.upload_from_filename(filenames)
         # blob.make_public()
@@ -252,7 +256,11 @@ def upload_image():
             flash('Allowed image types are - png, jpg, jpeg, gif')
             return redirect(request.url)
 
-
+@app.route("/mail_sent",methods=['POST'])
+def send_mail():
+     name=request.form.get("name")
+     print(name)
+     return render_template('Contactus.html')
 
 
 
