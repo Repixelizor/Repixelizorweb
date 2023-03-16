@@ -1,0 +1,137 @@
+Creating the WSGI Entry Point
+Next, create a file that will serve as the entry point for your application. This will tell the Gunicorn server how to interact with the application.
+
+Call the file wsgi.py:
+
+nano ~/myproject/wsgi.py
+In this file, import the Flask instance from our application and then run it:
+
+~/myproject/wsgi.py
+from myproject import app
+
+if __name__ == "__main__":
+    app.run()
+Save and close the file when you are finished.
+
+Step 4 — Configuring Gunicorn
+Your application is now written with an entry point established. You can now move on to configuring Gunicorn.
+
+Before moving on, check that Gunicorn can serve the application correctly.
+
+You can do this by passing it the name of the application’s entry point. This is constructed as the name of the module (minus the .py extension), plus the name of the callable within the application. In this case, it is wsgi:app.
+
+Also specify the interface and port to bind to using the 0.0.0.0:5000 argument so that the application will be started on a publicly available interface:
+
+cd ~/myproject
+gunicorn --bind 0.0.0.0:5000 wsgi:app
+You should see output like the following:
+
+Output
+[2020-05-20 14:13:00 +0000] [46419] [INFO] Starting gunicorn 20.0.4
+[2020-05-20 14:13:00 +0000] [46419] [INFO] Listening at: http://0.0.0.0:5000 (46419)
+[2020-05-20 14:13:00 +0000] [46419] [INFO] Using worker: sync
+[2020-05-20 14:13:00 +0000] [46421] [INFO] Booting worker with pid: 46421
+Visit your server’s IP address with :5000 appended to the end in your web browser again:
+
+http://your_server_ip:5000
+You should see your application’s output:
+
+Flask sample app
+
+When you have confirmed that it’s functioning properly, press CTRL-C in your terminal window.
+
+When you are done using the virtual environment, you can deactivate it:
+
+deactivate
+Any Python commands will now use the system’s Python environment again.
+
+Next, create the systemd service unit file. Creating a systemd unit file will allow Ubuntu’s init system to automatically start Gunicorn and serve the Flask application whenever the server boots.
+
+Create a unit file ending in .service within the /etc/systemd/system directory to begin:
+
+sudo nano /etc/systemd/system/myproject.service
+Inside, you’ll start with the [Unit] section, which is used to specify metadata and dependencies. Add a description of your service here and tell the init system to only start this after the networking target has been reached:
+
+/etc/systemd/system/myproject.service
+[Unit]
+Description=Gunicorn instance to serve rp
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/Repixelizorweb
+Environment="PATH=/home/ubuntu/Repixelizorweb/rp/bin"
+ExecStart=/bin/bash -c 'source /home/ubuntu/Repixelizorweb/rp/bin/activate; gunicorn --workers 1 --bind unix:/tmp/rp.sock -m 007 wsgi:app'
+
+[Install]
+WantedBy=multi-user.target
+With that, your systemd service file is complete. Save and close it now.
+
+You can now start the Gunicorn service that you created and enable it so that it starts at boot:
+
+sudo systemctl start myproject
+sudo systemctl enable myproject
+Let’s check the status:
+
+sudo systemctl status myproject
+You should see output like this:
+
+Output
+● myproject.service - Gunicorn instance to serve myproject
+     Loaded: loaded (/etc/systemd/system/myproject.service; enabled; vendor preset: enabled)
+     Active: active (running) since Tue 2022-05-10 19:40:41 UTC; 9s ago
+   Main PID: 17300 (gunicorn)
+      Tasks: 4 (limit: 2327)
+     Memory: 56.0M
+        CPU: 514ms
+     CGroup: /system.slice/myproject.service
+             ├─17300 /home/sammy/myproject/myprojectenv/bin/python3 /home/sammy/myproject/myprojectenv/bin/gunicorn --workers 3 --bind unix:myproject.sock -m 007 wsgi:app
+             ├─17301 /home/sammy/myproject/myprojectenv/bin/python3 /home/sammy/myproject/myprojectenv/bin/gunicorn --workers 3 --bind unix:myproject.sock -m 007 wsgi:app
+             ├─17302 /home/sammy/myproject/myprojectenv/bin/python3 /home/sammy/myproject/myprojectenv/bin/gunicorn --workers 3 --bind unix:myproject.sock -m 007 wsgi:app
+             └─17303 /home/sammy/myproject/myprojectenv/bin/python3 /home/sammy/myproject/myprojectenv/bin/gunicorn --workers 3 --bind unix:myproject.sock -m 007 wsgi:app
+
+May 10 19:40:41 r systemd[1]: Started Gunicorn instance to serve myproject.
+. . .
+If you see any errors, be sure to resolve them before continuing with the tutorial.
+
+Step 5 — Configuring Nginx to Proxy Requests
+Your Gunicorn application server should now be up and running, waiting for requests on the socket file in the project directory. Now you can configure Nginx to pass web requests to that socket by making some small additions to its configuration file.
+
+Begin by creating a new server block configuration file in Nginx’s sites-available directory. Call this myproject to keep in line with the rest of the guide:
+
+sudo nano /etc/nginx/sites-available/myproject
+Open up a server block and tell Nginx to listen on the default port 80. Also tell it to use this block for requests for our server’s domain name:
+
+/etc/nginx/sites-available/myproject
+server {
+    listen 80;
+    server_name your_domain www.your_domain;
+}
+Next, add a location block that matches every request. Within this block, you’ll include the proxy_params file that specifies some general proxying parameters that need to be set. You’ll then pass the requests to the socket you defined using the proxy_pass directive:
+
+/etc/nginx/sites-available/myproject
+server {
+    listen 80;
+    server_name 3.140.69.250 repixelizor.in www.repixelizor.in;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/tmp/rp.sock;
+    }
+}
+Save and close the file when you’re finished.
+
+To enable the Nginx server block configuration you’ve just created, link the file to the sites-enabled directory:
+
+sudo ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled
+With the file in that directory, you can test for syntax errors:
+
+sudo nginx -t
+If this returns without indicating any issues, restart the Nginx process to read the new configuration:
+
+sudo systemctl restart nginx
+Finally, adjust the firewall again. You no longer need access through port 5000, so you can remove that rule. You can then allow full access to the Nginx server:
+
+sudo ufw delete allow 5000
+sudo ufw allow 'Nginx Full'
