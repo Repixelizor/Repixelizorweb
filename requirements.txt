@@ -60,6 +60,7 @@ google-resumable-media
 googleapis-common-protos
 grpcio==1.51.3
 grpcio-status==1.51.3
+gunicorn
 httplib2==0.21.0
 idna==3.4
 importlib-metadata==6.0.0
