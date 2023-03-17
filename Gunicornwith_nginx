@@ -1,3 +1,4 @@
+python3 -m venv rp
 Creating the WSGI Entry Point
 Next, create a file that will serve as the entry point for your application. This will tell the Gunicorn server how to interact with the application.
 
