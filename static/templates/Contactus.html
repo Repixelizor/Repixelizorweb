@@ -6,6 +6,15 @@
 {% endblock %}
 {% block content %}
 <section class="contact_section layout_padding">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
     <div class="bg-img1">
       <img src="/static/templates/images/bg-img-1.png" alt="">
     </div>
@@ -21,25 +30,25 @@
       <div class="">
         <div class="row">
           <div class="col-md-8 mx-auto">
-            <form action="{{url_for('send_mail')}}">
+            <form method  ='post' action="{{url_for('send_mail')}}">
               <div class="contact_form-container">
                 <div>
                   <div>
-                    <input type="text" name="name" value="name" placeholder="Name">
+                    <input type="text" id="names" name="names" placeholder="Name" required="True" value= {{name}} >
                   </div>
                   <div>
-                    <input type="text" placeholder="Phone Number">
+                    <input type="text" id="phone" name="phone" placeholder="Phone Number">
                   </div>
                   <div>
-                    <input type="email" placeholder="Email" required="True">
+                    <input type="email" id="email" name="email" placeholder="Email" required="True" value={{email}} >
                   </div>
                   <div class="">
-                    <input type="text" placeholder="Message" class="message_input" required="True">
+                    <input type="text" id="msg" name="msg" placeholder="Message" class="message_input" required="True">
                   </div>
                   <div class=" d-flex justify-content-center ">
                     <button type="submit">
-                      Send
-                    </button>
+                      Submit
+                  </button>
                   </div>
                 </div>
               </div>

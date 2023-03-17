@@ -20,10 +20,10 @@
       
       <div class="heading_container">
         <h2>
-          Repix your Memories
+          Cartoonize yourself
         </h2>
         <p>
-          Hello {{name}} Please Upload an Image Below and Select all parameter for Processing
+          Hello {{name}} Please Upload an Image Below with max size of W=1300Pixels and H=1800Pixels
         </p>
       </div>
       <div class="box-2">
@@ -53,10 +53,10 @@
            
               <div class="row">
                 <div class="column">
-          <form name="process" method="post" action="/process" enctype="multipart/form-data" style="padding-left:10px;padding-right:50px;"> 
+          <form name="process" method="post" action="/process"style="padding-left:10px;padding-right:50px;"> 
             <p>
-              <input type="radio" id="radio1" name="radio" value="scratches">Scratches
-              <input type="radio" id="radio2" name="radio" value="deoldify" checked>Old Black and white                  
+              <input type="radio" id="BW" name="radio" value="Black & White"><label for="BW">Black & White</label>
+              <input type="radio" id="colour" name="radio" value="Colour Image"><label for="colour">Colour Image</label>                 
             </p>  
             <input type="submit" name="action" value="Process" class="btn btn-info" >
               

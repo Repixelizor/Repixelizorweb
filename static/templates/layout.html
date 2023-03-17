@@ -25,14 +25,18 @@
         <!-- responsive style -->
         <link href="/static/templates/css/responsive.css" rel="stylesheet" /><script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
         <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>{% block title %}{% endblock %} - Repixelizor</title>
     {% endblock %}
   </head>
   <body>
     
       <div class="hero_area">
+        
         <header class="header_section">
           <div class="container-fluid">
+            
             <div class="row">
               <div class="col-lg-11 offset-lg-1">
                 <nav class="navbar navbar-expand-lg custom_nav-container ">
@@ -52,21 +56,27 @@
                     <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
                       <ul class="navbar-nav  "> 
                         <li class="nav-item">
+                          {% if session['name'] %}
+                          <a class="nav-link" href="{{url_for('homeindex')}}">Home </a>
+                          {% else %}
                           <a class="nav-link" href="{{url_for('index')}}">Home </a>
+                          {% endif %}
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="{{url_for('about')}}"> About <span class="sr-only"></span> </a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="{{url_for('privacy')}}"> Portfolio </a>
+                          <a class="nav-link" href="{{url_for('privacy')}}"> Privacy Policy </a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="{{url_for('Contact')}}">Contact Us</a>
                         </li>
                       </ul>
-                      <form class="form-inline">
-                        <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit"></button>
+                      {% if session['name'] %}
+                      <form class="form-inline" action="{{url_for('logout')}}" >
+                        <input type="submit" name="logout" value="logout" class="btn btn-info" >
                       </form>
+                      {% endif %}
                     </div>
     
                   </div>
@@ -74,7 +84,17 @@
               </div>
             </div>
           </div>
-        </header>{% block content %} {% endblock %}</div>
+        </header>
+        {% if session['name'] %}
+        <div class="w3-sidebar w3-bar-block w3-border " style="height:300px;width:180px;padding-top: 30px;background-color: lightcyan;" id="mySidebar">
+          
+          <a href="{{url_for('homeindex')}}" class="w3-bar-item w3-button" >Deoldify<img src="/static/templates/images/tv.png" style="height: 30px;width: 30px ;"></img></a>
+          <a href="{{url_for('toonindex')}}" class="w3-bar-item w3-button" >Cartoonify<img src="/static/templates/images/camcorder.png" style="height: 30px;width: 30px ;"></img></a>
+          <a href="{{url_for('homeindex')}}" class="w3-bar-item w3-button">Trasforn Video<img src="/static/templates/images/bulb.png" style="height: 30px;width: 30px ;" ></img></a>
+          <a href="{{url_for('homeindex')}}" class="w3-bar-item w3-button">Image in Movie<img src="/static/templates/images/camera.png" style="height: 30px;width: 30px ;"></img></a>
+        </div>
+        {% endif %}
+        {% block content %} {% endblock %}</div>
     <div id="footer">
       {% block footer %}
       <section class="info_section ">
@@ -126,7 +146,15 @@
     
       <script type="text/javascript" src="/static/templates/js/jquery-3.4.1.min.js"></script>
       <script type="text/javascript" src="/static/templates/js/bootstrap.js"></script>
-    
+      <script>
+        function w3_open() {
+          document.getElementById("mySidebar").style.display = "block";
+        }
+        
+        function w3_close() {
+          document.getElementById("mySidebar").style.display = "none";
+        }
+        </script>
       {% endblock %}
     </div>
   </body>

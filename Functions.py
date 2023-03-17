@@ -14,6 +14,20 @@ from deoldify.visualize import *
 import warnings
 warnings.filterwarnings("ignore", 
                         category=UserWarning, message=".*?Your .*? set is empty.*?")
+
+import numpy as np
+import urllib.request
+# METHOD #1: OpenCV, NumPy, and urllib
+
+def url_to_image(url):
+	# download the image, convert it to a NumPy array, and then read
+	# it into OpenCV format
+    resp = urllib.request.urlopen(url)
+    image = np.asarray(bytearray(resp.read()), dtype="uint8")
+    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+	# return the image
+    return image
+
 def AI_enhance(fileurl):
 	url = "https://ai-face-enhance.p.rapidapi.com/run"
 
@@ -132,3 +146,39 @@ def deoldify(sourceurl):
 		# show_image_in_notebook(image_path)
 	else:
 		return 'Provide the valid image URL.'
+
+
+
+def cartoonize(imgpath, k,toonurl,type):
+    if type==1:
+        path=deoldify(imgpath)
+        print(path)
+    else:
+        path=imgpath
+        # imgpath=url_to_image(path)
+    img=cv2.imread(str(path))    
+    
+    # Defining input data for clustering
+    data = np.float32(img).reshape((-1, 3))
+    
+    # Defining criteria
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 20, 1.0)
+    # Applying cv2.kmeans function
+    _, label, center = cv2.kmeans(data, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+    center = np.uint8(center)
+    # print(center)
+# Reshape the output data to the size of input image
+    result = center[label.flatten()]
+    result = result.reshape(img.shape)
+    # Convert the input image to gray scale
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Perform adaptive threshold
+    edges  = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 9, 8)
+    cv2.imshow('edges', edges)
+    # Smooth the result
+    blurred = cv2.medianBlur(result, 3)
+    # Combine the result and edges to get final cartoon effect
+    cartoon = cv2.bitwise_and(blurred, blurred, mask=edges)
+    cv2.imwrite(toonurl,cartoon)
+    return toonurl
+
